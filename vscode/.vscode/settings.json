@@ -1,0 +1,14 @@
+{
+  "editor.fontSize": 20,
+  "files.encoding": "utf8bom",
+  "background.fullscreen": {
+    "images": [
+      "file:///C:/Users/20389/Pictures/Camera%20Roll/fnn.jpg"
+    ],
+    "opacity": 0.1,
+    "size": "cover",
+    "position": "center",
+    "interval": 0,
+    "random": false
+  }
+}
