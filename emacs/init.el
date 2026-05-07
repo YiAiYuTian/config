@@ -24,9 +24,13 @@
 
 (setenv "CC" "gcc")
 (setenv "CXX" "g++")
-(defun my-compile ()
-  (interactive)
-  (compile "cmake -B build -G \"MinGW Makefiles\" && mingw32-make -C build"))
+(defun my-compile (&optional cmake-dir)
+  (interactive "sInput CMakeLists.txt Dir (default[current dir]): ")
+  (let ((source-dir (if (or (null cmake-dir) (string-empty-p (string-trim cmake-dir)))
+                        "."
+                      (string-trim cmake-dir))))
+    (compile (format "cmake -B build -G \"MinGW Makefiles\" -S %s && mingw32-make -C build"
+                      source-dir))))
 (global-set-key (kbd "<f5>") 'my-compile)
 
 (defun my-build ()
@@ -36,7 +40,7 @@
 
 (defun my-run()
   (interactive)
-  (let ((name (read-string "input app name: ")))
+  (let ((name (read-string "sInput app name: ")))
     (shell-command (concat ".\\build\\" name ".exe"))))
 (global-set-key (kbd "<f7>") 'my-run)
 
