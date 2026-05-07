@@ -7,7 +7,7 @@
 (ido-mode 1)
 (ido-everywhere 1)
 (global-display-line-numbers-mode 1)
-(show-paren-mode 1)
+(delete-selection-mode 1)
 
 (setq msys2-mingw64 "D:/msys64/mingw64/bin")
 (setq cmake "D:/Cmake/bin")
@@ -27,4 +27,41 @@
 (defun my-compile ()
   (interactive)
   (compile "cmake -B build -G \"MinGW Makefiles\" && mingw32-make -C build"))
-(global-set-key (kbd "<f6>") 'my-compile)
+(global-set-key (kbd "<f5>") 'my-compile)
+
+(defun my-build ()
+  (interactive)
+  (compile "mingw32-make -C build"))
+(global-set-key (kbd "<f6>") 'my-build)
+
+(defun my-run()
+  (interactive)
+  (let ((name (read-string "input app name: ")))
+    (shell-command (concat ".\\build\\" name ".exe"))))
+(global-set-key (kbd "<f7>") 'my-run)
+
+(require 'company)
+(global-company-mode 1)
+(setq company-idle-delay 0.1)
+(setq company-minimum-prefix-length 1)
+(define-key company-active-map (kbd "TAB") 'company-complete)
+(define-key company-active-map (kbd "<return>") 'company-complete-selection)
+
+(setq c-default-style "linux")
+(setq c-basic-offset 4)
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
+
+(add-hook 'c-mode-hook
+          (lambda ()
+            (setq c-basic-offset 4)
+            (setq indent-tabs-mode nil)))
+
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (setq c-basic-offset 4)
+            (setq indent-tabs-mode nil)))
+
+(require 'eglot)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+(add-hook 'c-mode-hook 'eglot-ensure)

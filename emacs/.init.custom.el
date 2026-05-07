@@ -17,4 +17,5 @@
      default))
  '(display-line-numbers-type 'relative)
  '(inhibit-startup-screen t)
- '(package-selected-packages '(gruber-darker-theme)))
+ '(package-selected-packages '(company eglot-inactive-regions gruber-darker-theme))
+ '(warning-suppress-types '((initialization) (initialization))))
