@@ -15,7 +15,10 @@
       "cacheVariables": {
         "CMAKE_CXX_STANDARD": "23",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
-        "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        
+        "MSVC_STATIC_MD": "OFF",
+        "MSVC_STATIC": "OFF"
       }
     },
     {
@@ -32,7 +35,9 @@
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_MAKE_PROGRAM": "mingw32-make",
         "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_APPLOCAL_DEPS": "OFF"
+        "VCPKG_APPLOCAL_DEPS": "OFF",
+        
+        "MINGW_STATIC": "OFF"
       }
     },
     {
@@ -49,7 +54,9 @@
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_MAKE_PROGRAM": "mingw32-make",
         "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_APPLOCAL_DEPS": "OFF"
+        "VCPKG_APPLOCAL_DEPS": "OFF",
+
+        "CLANG_STATIC": "OFF"
       }
     },
 
@@ -80,7 +87,9 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_FLAGS_DEBUG": "/MTd",
         "CMAKE_CXX_FLAGS_DEBUG": "/MTd",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static",
+
+        "MSVC_STATIC": "ON"
       }
     },
     {
@@ -91,7 +100,9 @@
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_C_FLAGS_RELEASE": "/MT",
         "CMAKE_CXX_FLAGS_RELEASE": "/MT",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static",
+
+        "MSVC_STATIC": "ON"
       }
     },
     {
@@ -100,7 +111,9 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+
+        "MSVC_STATIC_MD": "ON"
       }
     },
     {
@@ -109,7 +122,9 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+
+        "MSVC_STATIC_MD": "ON"
       }
     },
 
@@ -139,7 +154,9 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-static"
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "MINGW_STATIC": "ON"
       }
     },
     {
@@ -149,7 +166,9 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-static"
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "MINGW_STATIC": "ON"
       }
     },
 
@@ -178,7 +197,9 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-static"
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "CLANG_STATIC": "ON"
       }
     },
     {
@@ -188,7 +209,9 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-static"
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "CLANG_STATIC": "ON"
       }
     }
   ],
