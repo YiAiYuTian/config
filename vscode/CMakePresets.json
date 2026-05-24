@@ -17,8 +17,9 @@
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
         "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
         
-        "MSVC_STATIC_MD": "OFF",
-        "MSVC_STATIC": "OFF"
+        "MSVC_STATIC_MD_LIB": "OFF",
+        "MSVC_STATIC_MD_DLL": "OFF",
+        "MSVC_STATIC_MT_LIB": "OFF"
       }
     },
     {
@@ -37,7 +38,8 @@
         "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_APPLOCAL_DEPS": "OFF",
         
-        "MINGW_STATIC": "OFF"
+        "MINGW_STATIC_MD_LIB": "OFF",
+        "MINGW_STATIC_MD_DLL": "OFF"
       }
     },
     {
@@ -56,7 +58,8 @@
         "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_APPLOCAL_DEPS": "OFF",
 
-        "CLANG_STATIC": "OFF"
+        "CLANG_STATIC_MD_LIB": "OFF",
+        "CLANG_STATIC_MD_DLL": "OFF"
       }
     },
 
@@ -89,7 +92,7 @@
         "CMAKE_CXX_FLAGS_DEBUG": "/MTd",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static",
 
-        "MSVC_STATIC": "ON"
+        "MSVC_STATIC_MT_LIB": "ON"
       }
     },
     {
@@ -102,29 +105,51 @@
         "CMAKE_CXX_FLAGS_RELEASE": "/MT",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static",
 
-        "MSVC_STATIC": "ON"
+        "MSVC_STATIC_MT_LIB": "ON"
       }
     },
     {
-      "name": "msvc-debug-static-md",
-      "binaryDir": "${sourceDir}/build/msvc-debug-static-md",
+      "name": "msvc-debug-static-md-lib",
+      "binaryDir": "${sourceDir}/build/msvc-debug-static-md-lib",
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
 
-        "MSVC_STATIC_MD": "ON"
+        "MSVC_STATIC_MD_LIB": "ON"
       }
     },
     {
-      "name": "msvc-release-static-md",
-      "binaryDir": "${sourceDir}/build/msvc-release-static-md",
+      "name": "msvc-release-static-md-lib",
+      "binaryDir": "${sourceDir}/build/msvc-release-static-md-lib",
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
 
-        "MSVC_STATIC_MD": "ON"
+        "MSVC_STATIC_MD_LIB": "ON"
+      }
+    },
+    {
+      "name": "msvc-debug-static-md-dll",
+      "binaryDir": "${sourceDir}/build/msvc-debug-static-md-dll",
+      "inherits": "msvc-user",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+
+        "MSVC_STATIC_MD_DLL": "ON"
+      }
+    },
+    {
+      "name": "msvc-release-static-md-dll",
+      "binaryDir": "${sourceDir}/build/msvc-release-static-md-dll",
+      "inherits": "msvc-user",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+
+        "MSVC_STATIC_MD_DLL": "ON"
       }
     },
 
@@ -148,27 +173,51 @@
       }
     },
     {
-      "name": "mingw-debug-static-md",
-      "binaryDir": "${sourceDir}/build/mingw-debug-static-md",
+      "name": "mingw-debug-static-md-lib",
+      "binaryDir": "${sourceDir}/build/mingw-debug-static-md-lib",
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
-        "MINGW_STATIC": "ON"
+        "MINGW_STATIC_MD_LIB": "ON"
       }
     },
     {
-      "name": "mingw-release-static-md",
-      "binaryDir": "${sourceDir}/build/mingw-release-static-md",
+      "name": "mingw-release-static-md-lib",
+      "binaryDir": "${sourceDir}/build/mingw-release-static-md-lib",
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
-        "MINGW_STATIC": "ON"
+        "MINGW_STATIC_MD_LIB": "ON"
+      }
+    },
+    {
+      "name": "mingw-debug-static-md-dll",
+      "binaryDir": "${sourceDir}/build/mingw-debug-static-md-dll",
+      "inherits": "mingw-user",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXE_LINKER_FLAGS": "-static",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "MINGW_STATIC_MD_DLL": "ON"
+      }
+    },
+    {
+      "name": "mingw-release-static-md-dll",
+      "binaryDir": "${sourceDir}/build/mingw-release-static-md-dll",
+      "inherits": "mingw-user",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXE_LINKER_FLAGS": "-static",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "MINGW_STATIC_MD_DLL": "ON"
       }
     },
 
@@ -191,27 +240,51 @@
       }
     },
     {
-      "name": "clang-debug-static-md",
-      "binaryDir": "${sourceDir}/build/clang-debug-static-md",
+      "name": "clang-debug-static-md-lib",
+      "binaryDir": "${sourceDir}/build/clang-debug-static-md-lib",
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
-        "CLANG_STATIC": "ON"
+        "CLANG_STATIC_MD_LIB": "ON"
       }
     },
     {
-      "name": "clang-release-static-md",
-      "binaryDir": "${sourceDir}/build/clang-release-static-md",
+      "name": "clang-release-static-md-lib",
+      "binaryDir": "${sourceDir}/build/clang-release-static-md-lib",
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
-        "CLANG_STATIC": "ON"
+        "CLANG_STATIC_MD_LIB": "ON"
+      }
+    },
+    {
+      "name": "clang-debug-static-md-dll",
+      "binaryDir": "${sourceDir}/build/clang-debug-static-md-dll",
+      "inherits": "clang-user",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXE_LINKER_FLAGS": "-static",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "CLANG_STATIC_MD_DLL": "ON"
+      }
+    },
+    {
+      "name": "clang-release-static-md-dll",
+      "binaryDir": "${sourceDir}/build/clang-release-static-md-dll",
+      "inherits": "clang-user",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXE_LINKER_FLAGS": "-static",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+
+        "CLANG_STATIC_MD_DLL": "ON"
       }
     }
   ],
@@ -238,13 +311,23 @@
       "configuration": "Release"
     },
     {
-      "name": "msvc-debug-static-md",
-      "configurePreset": "msvc-debug-static-md",
+      "name": "msvc-debug-static-md-lib",
+      "configurePreset": "msvc-debug-static-md-lib",
       "configuration": "Debug"
     },
     {
-      "name": "msvc-release-static-md",
-      "configurePreset": "msvc-release-static-md",
+      "name": "msvc-release-static-md-lib",
+      "configurePreset": "msvc-release-static-md-lib",
+      "configuration": "Release"
+    },
+    {
+      "name": "msvc-debug-static-md-dll",
+      "configurePreset": "msvc-debug-static-md-dll",
+      "configuration": "Debug"
+    },
+    {
+      "name": "msvc-release-static-md-dll",
+      "configurePreset": "msvc-release-static-md-dll",
       "configuration": "Release"
     },
 
@@ -260,13 +343,23 @@
       "configuration": "Release"
     },
     {
-      "name": "mingw-debug-static-md",
-      "configurePreset": "mingw-debug-static-md",
+      "name": "mingw-debug-static-md-lib",
+      "configurePreset": "mingw-debug-static-md-lib",
       "configuration": "Debug"
     },
     {
-      "name": "mingw-release-static-md",
-      "configurePreset": "mingw-release-static-md",
+      "name": "mingw-release-static-md-lib",
+      "configurePreset": "mingw-release-static-md-lib",
+      "configuration": "Release"
+    },
+    {
+      "name": "mingw-debug-static-md-dll",
+      "configurePreset": "mingw-debug-static-md-dll",
+      "configuration": "Debug"
+    },
+    {
+      "name": "mingw-release-static-md-dll",
+      "configurePreset": "mingw-release-static-md-dll",
       "configuration": "Release"
     },
 
@@ -281,13 +374,23 @@
       "configuration": "Release"
     },
     {
-      "name": "clang-debug-static-md",
-      "configurePreset": "clang-debug-static-md",
+      "name": "clang-debug-static-md-lib",
+      "configurePreset": "clang-debug-static-md-lib",
       "configuration": "Debug"
     },
     {
-      "name": "clang-release-static-md",
-      "configurePreset": "clang-release-static-md",
+      "name": "clang-release-static-md-lib",
+      "configurePreset": "clang-release-static-md-lib",
+      "configuration": "Release"
+    },
+    {
+      "name": "clang-debug-static-md-dll",
+      "configurePreset": "clang-debug-static-md-dll",
+      "configuration": "Debug"
+    },
+    {
+      "name": "clang-release-static-md-dll",
+      "configurePreset": "clang-release-static-md-dll",
       "configuration": "Release"
     }
   ]
