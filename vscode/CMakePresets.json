@@ -14,7 +14,6 @@
       "architecture": "x64",
       "cacheVariables": {
         "CMAKE_CXX_STANDARD": "23",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
         "CMAKE_TOOLCHAIN_FILE": "D:/VSproject/ThirdParty/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake",
         
         "MSVC_STATIC_MD_LIB": "OFF",
@@ -31,7 +30,6 @@
       },
       "cacheVariables": {
         "CMAKE_CXX_STANDARD": "23",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
         "CMAKE_C_COMPILER": "gcc",
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_MAKE_PROGRAM": "mingw32-make",
@@ -51,7 +49,6 @@
       },
       "cacheVariables": {
         "CMAKE_CXX_STANDARD": "23",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_MAKE_PROGRAM": "mingw32-make",
@@ -70,6 +67,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-windows"
       }
     },
@@ -79,6 +77,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-windows"
       }
     },
@@ -88,6 +87,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_C_FLAGS_DEBUG": "/MTd",
         "CMAKE_CXX_FLAGS_DEBUG": "/MTd",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static",
@@ -101,6 +101,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_C_FLAGS_RELEASE": "/MT",
         "CMAKE_CXX_FLAGS_RELEASE": "/MT",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static",
@@ -114,6 +115,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
 
         "MSVC_STATIC_MD_LIB": "ON"
@@ -125,6 +127,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
 
         "MSVC_STATIC_MD_LIB": "ON"
@@ -136,6 +139,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
 
         "MSVC_STATIC_MD_DLL": "ON"
@@ -147,6 +151,7 @@
       "inherits": "msvc-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
 
         "MSVC_STATIC_MD_DLL": "ON"
@@ -160,6 +165,7 @@
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
       }
     },
@@ -169,6 +175,7 @@
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
       }
     },
@@ -178,6 +185,7 @@
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -190,6 +198,7 @@
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -202,6 +211,7 @@
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -214,6 +224,7 @@
       "inherits": "mingw-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -227,6 +238,7 @@
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
       }
     },
@@ -236,6 +248,7 @@
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
       }
     },
@@ -245,6 +258,7 @@
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -257,6 +271,7 @@
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -269,6 +284,7 @@
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
@@ -281,6 +297,7 @@
       "inherits": "clang-user",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}",
         "CMAKE_EXE_LINKER_FLAGS": "-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
 
