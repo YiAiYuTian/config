@@ -71,35 +71,26 @@
 (global-set-key (kbd "<f7>") 'my-run)
 
 ;; ============================================================
-;; C / C++ 编码风格 — Allman 4空格（按官方示例配置）
+;; C / C++ 编码风格 — Allman 4空格
 ;; ============================================================
 
 (require 'cc-mode)
 
-;; 1. c-initialization-hook: 绑定回车键到 c-context-line-break
-;;    这是官方推荐做法，避免 electric-indent 重新缩进上一行
+;; 回车键绑到 c-context-line-break（防止回车重新缩进上一行）
 (defun my-c-initialization-hook ()
   (define-key c-mode-base-map "\C-m" 'c-context-line-break))
 (add-hook 'c-initialization-hook 'my-c-initialization-hook)
 
-;; 2. 定义个人风格（按官方 sample .emacs 方式）
+;; 定义风格
 (defconst my-c-style
   '((c-tab-always-indent        . t)
     (c-comment-only-line-offset . 4)
-    (c-hanging-braces-alist     . ((substatement-open before after)
-                                   (defun-open before after)
-                                   (class-open before after)
-                                   (inline-open before after)
-                                   (block-open before after)
-                                   (brace-list-open before after)
-                                   (statement-case-open before after)))
     (c-hanging-colons-alist     . ((member-init-intro before)
                                    (inher-intro)
                                    (case-label after)
                                    (label after)
                                    (access-label after)))
     (c-cleanup-list             . (scope-operator
-                                   empty-defun-braces
                                    defun-close-semi
                                    brace-else-brace
                                    brace-elseif-brace))
@@ -121,40 +112,32 @@
   "Allman 4-space C/C++ Style")
 (c-add-style "ALLMAN4" my-c-style)
 
-;; 3. c-mode-common-hook: 应用风格 + 缩进设置
+;; hook
 (defun my-c-mode-common-hook ()
-  ;; 应用个人风格
   (c-set-style "ALLMAN4")
-  ;; 缩进设置
   (setq c-basic-offset 4
         tab-width 4
-        indent-tabs-mode nil)
-  ;; 开启 auto-newline（输入 { ; } 自动排版换行）
-  (c-toggle-auto-newline 1)
-  ;; 诊断
-  (message "=== CC-MODE: style=%s offset=%d tab=%d ==="
-           c-indentation-style c-basic-offset tab-width))
+        indent-tabs-mode nil))
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-;; 4. 强制用传统 cc-mode（禁止 Emacs 29+ 切到 ts-mode）
+;; 强制用传统 cc-mode
 (setq major-mode-remap-alist
       '((c-mode . c-mode)
         (c++-mode . c++-mode)
         (java-mode . java-mode)))
 
-;; 5. 默认风格
+;; 默认风格
 (setq c-default-style '((java-mode . "java")
                         (awk-mode . "awk")
                         (other . "ALLMAN4")))
 
-;; 6. eglot 防覆盖
+;; eglot 防覆盖
 (defun my-eglot-ensure-style (&rest _)
   (when (derived-mode-p 'c-mode 'c++-mode)
     (c-set-style "ALLMAN4")
     (setq c-basic-offset 4
           tab-width 4
-          indent-tabs-mode nil)
-    (c-toggle-auto-newline 1)))
+          indent-tabs-mode nil)))
 (add-hook 'eglot-managed-mode-hook 'my-eglot-ensure-style)
 ;; ============================================================
 
