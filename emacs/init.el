@@ -1,6 +1,7 @@
-(setq custom-file "~/.emacs.d/.init.custom.el")
-(load-file custom-file)
+1;;使用msys2
+;;    gcc g++ clangd neocmakelsp
 
+;;通用设置
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
@@ -8,145 +9,170 @@
 (ido-everywhere 1)
 (global-display-line-numbers-mode 1)
 (delete-selection-mode 1)
+(setq inhibit-startup-message t)
+(setq create-lockfiles nil)
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq scroll-conservatively 10000)
+(setq scroll-margin 3)
+(setq scroll-preserve-screen-position t)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 5)))
+(setq display-line-numbers-width 4)
+(setq display-line-numbers-grow-only nil)
+(setq display-line-numbers-width-start t)
 
-(setq msys2-mingw64 "D:/msys64/mingw64/bin")
-(setq cmake-path "D:/Cmake/bin")
-(add-to-list 'exec-path msys2-mingw64)
-(add-to-list 'exec-path cmake-path)
-(setenv "PATH" (concat msys2-mingw64 ";" cmake-path ";" (getenv "PATH")))
+;; 查找CMake根目录
+(defun my-find-cmake-root ()
+  (let ((dir (expand-file-name default-directory)))
+    (while (and dir (not (file-exists-p (concat dir "/CMakeLists.txt"))))
+      (setq dir (file-name-directory (directory-file-name dir)))
+      (when (equal dir "/")
+        (setq dir nil)))
+    dir))
 
-(setq display-buffer-alist
-      '(("\\*compilation\\*"
-         (display-buffer-below-selected)
-         (window-height . 0.3))))
-(setq compilation-scroll-output t)
+;; 提取项目名
+(defun my-get-cmake-project-name (root-dir)
+  (let ((cmfile (concat root-dir "/CMakeLists.txt")))
+    (with-temp-buffer
+      (insert-file-contents cmfile)
+      (goto-char (point-min))
+      (if (re-search-forward "^[[:space:]]*project\\s*(" nil t)
+          (progn
+            (forward-char 1)
+            (skip-chars-forward " \t")
+            (let ((start (point)))
+              (skip-chars-forward "a-zA-Z0-9_-")
+              (buffer-substring-no-properties start (point))))
+        nil))))
 
-(global-set-key [f11] 'toggle-frame-fullscreen)
-
-(setenv "CC" "gcc")
-(setenv "CXX" "g++")
-(defvar my-last-source-dir nil "保存 F5 的源码目录")
-(defvar my-project-name nil "自动读取的 CMake ProjectName")
-
-(defun my-compile (&optional cmake-dir)
-  (interactive "sInput CMakeLists.txt Dir (default[current dir]): ")
-  (let* ((source-dir (if (or (null cmake-dir) (string-empty-p (string-trim cmake-dir)))
-                         "."
-                       (string-trim cmake-dir)))
-         (abs-source-dir (expand-file-name source-dir))
-         (cmake-file (concat (file-name-as-directory abs-source-dir) "CMakeLists.txt"))
-         (name ""))
-    (setq my-last-source-dir abs-source-dir)
-    (when (file-exists-p cmake-file)
-      (with-temp-buffer
-        (insert-file-contents cmake-file)
-        (goto-char (point-min))
-        (when (re-search-forward "^project(\$[^ ]+\$" nil t)
-          (setq name (match-string 1))
-          (setq my-project-name name))))
-    (compile (format "cmake -B %s/build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G \"MinGW Makefiles\" -S %s && mingw32-make -C %s/build"
-                     abs-source-dir abs-source-dir abs-source-dir))))
-(global-set-key (kbd "<f5>") 'my-compile)
-
-(defun my-build ()
+;; F5 编译（compilation窗口，自带chcp 65001）
+(defun my-cmake-build ()
   (interactive)
-  (if (not my-last-source-dir)
-      (error "先按 F5 初始化项目！")
-    (compile (format "mingw32-make -C %s/build" my-last-source-dir))))
-(global-set-key (kbd "<f6>") 'my-build)
+  (unless (fboundp 'my-find-cmake-root)
+    (message "错误：编译工具函数未加载，请重载配置文件")
+    (return))
+  (let ((root (my-find-cmake-root)))
+    (if root
+        (let ((build-cmd
+               (if (eq system-type 'windows-nt)
+                   (concat "cd " (shell-quote-argument root) " && chcp 65001 >nul 2>&1 && cmake -B build && cmake --build build")
+                 (concat "cd " (shell-quote-argument root) " && cmake -B build && cmake --build build"))))
+          (compile build-cmd))
+      (message "错误：当前目录向上未找到 CMakeLists.txt"))))
 
-(defun my-run ()
+;; F6 运行（输出缓冲窗口，自带chcp 65001）
+(defun my-cmake-run ()
   (interactive)
-  (cond
-   ((not my-last-source-dir)
-    (error "先按 F5 编译一次！"))
-   ((not my-project-name)
-    (error "无法读取项目名，请检查 CMakeLists.txt"))
-   (t
-    (let* ((abs-dir (expand-file-name my-last-source-dir))
-           (exe-path (concat (file-name-as-directory abs-dir)
-                             "build/" my-project-name ".exe")))
-      (message "运行程序：%s" exe-path)
-      (shell-command exe-path)))))
-(global-set-key (kbd "<f7>") 'my-run)
+  (unless (and (fboundp 'my-find-cmake-root) (fboundp 'my-get-cmake-project-name))
+    (message "错误：编译工具函数未加载，请重载配置文件")
+    (return))
+  (let ((root (my-find-cmake-root)))
+    (if (not root)
+        (message "错误：未找到 CMakeLists.txt，无法定位程序")
+      (let ((exe-name (my-get-cmake-project-name root)))
+        (setq exe-name (or exe-name "YialiteTest"))
+        (let* ((quoted-root (shell-quote-argument root))
+               (quoted-exe (shell-quote-argument exe-name))
+               (cmd
+                (if (eq system-type 'windows-nt)
+                    (concat "cd " quoted-root " && chcp 65001 >nul 2>&1 && .\\build\\" quoted-exe ".exe && pause")
+                  (concat "cd " quoted-root " && ./build/" quoted-exe))))
+          (shell-command cmd "*cmake-run-output*"))))))
 
-;; ============================================================
-;; C / C++ 编码风格 — Allman 4空格
-;; ============================================================
+;; 按键绑定
+(define-key global-map (kbd "<f5>") #'my-cmake-build)
+(define-key global-map (kbd "<f6>") #'my-cmake-run)
 
-(require 'cc-mode)
+;;镜像源
+;;(require 'package)
+;;(setq package-archives
+;;      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+;;        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+;;        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
-;; 回车键绑到 c-context-line-break（防止回车重新缩进上一行）
-(defun my-c-initialization-hook ()
-  (define-key c-mode-base-map "\C-m" 'c-context-line-break))
-(add-hook 'c-initialization-hook 'my-c-initialization-hook)
+;;(package-initialize)
+;;(package-refresh-contents)
 
-;; 定义风格
-(defconst my-c-style
-  '((c-tab-always-indent        . t)
-    (c-comment-only-line-offset . 4)
-    (c-hanging-colons-alist     . ((member-init-intro before)
-                                   (inher-intro)
-                                   (case-label after)
-                                   (label after)
-                                   (access-label after)))
-    (c-cleanup-list             . (scope-operator
-                                   defun-close-semi
-                                   brace-else-brace
-                                   brace-elseif-brace))
-    (c-offsets-alist            . ((substatement-open . 0)
-                                   (defun-open . 0)
-                                   (defun-block-intro . +)
-                                   (statement-block-intro . +)
-                                   (block-close . 0)
-                                   (inline-open . 0)
-                                   (class-open . 0)
-                                   (inclass . +)
-                                   (access-label . -)
-                                   (statement-case-open . 0)
-                                   (case-label . 0)
-                                   (brace-list-open . 0)
-                                   (arglist-close . c-lineup-arglist)
-                                   (knr-argdecl-intro . -)))
-    (c-echo-syntactic-information-p . t))
-  "Allman 4-space C/C++ Style")
-(c-add-style "ALLMAN4" my-c-style)
+;;自定义文件
+(setq custom-file (expand-file-name "init.custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
-;; hook
-(defun my-c-mode-common-hook ()
-  (c-set-style "ALLMAN4")
-  (setq c-basic-offset 4
-        tab-width 4
-        indent-tabs-mode nil))
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+;;包
+(dolist (pkg '(eglot company multiple-cursors cmake-mode))
+  (unless (package-installed-p pkg)
+    (package-install pkg)))
 
-;; 强制用传统 cc-mode
-(setq major-mode-remap-alist
-      '((c-mode . c-mode)
-        (c++-mode . c++-mode)
-        (java-mode . java-mode)))
+;;多光标
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-<mouse-1>") 'mc/toggle-cursor-on-click)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)    ; 下一处同词加光标
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this); 上一处同词加光标
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this) ; 全文所有同词全部加光标
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
-;; 默认风格
-(setq c-default-style '((java-mode . "java")
-                        (awk-mode . "awk")
-                        (other . "ALLMAN4")))
-
-;; eglot 防覆盖
-(defun my-eglot-ensure-style (&rest _)
-  (when (derived-mode-p 'c-mode 'c++-mode)
-    (c-set-style "ALLMAN4")
-    (setq c-basic-offset 4
-          tab-width 4
-          indent-tabs-mode nil)))
-(add-hook 'eglot-managed-mode-hook 'my-eglot-ensure-style)
-;; ============================================================
-
+;;补全库
 (require 'company)
 (global-company-mode 1)
+(setq company-minimum-prefix-length 2)
+(setq company-idle-delay 0.2)
+(setq company-tooltip-align-annotations t)
+(setq company-selection-wrap-around t)
+(setq company-show-numbers t)
 
+(define-key company-active-map (kbd "TAB") #'company-select-next)
+(define-key company-active-map (kbd "<backtab>") #'company-select-previous)
+(define-key company-active-map (kbd "RET") 'company-complete-selection)
+
+(setq company-backends '(company-capf company-dabbrev company-files company-keywords))
+
+;;语言服务
 (require 'eglot)
-(setq eglot-format-on-save nil)
+(setq eglot-server-programs
+      '((c-mode . ("clangd"))
+        (c++-mode . ("clangd"))
+        (cmake-mode . ("neocmakelsp" "stdio")))) ;;有bug
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
+(setq eglot-confirm-signature-help-chars nil)
+(setq eglot-autoshutdown t)
+(setq eglot-send-changes-idle-time 0.05) ; 缩短同步延迟，补全响应更快
+(setq eglot-strict-indent nil)
+(setq eglot-report-progress nil)
+(setq flymake-no-changes-timeout 0.3)
+(setq eglot-ignored-server-capabilities '(documentLinkProvider))
+(setq eglot-event-log t)
 
-(setq search-invisible t)
+;;cmake
+(require 'cmake-mode)
+(setq cmake-tab-width 4)
+(setq cmake-indent-tabs-mode nil)
+(add-hook 'cmake-mode-hook 'eglot-ensure)
+(add-hook 'cmake-mode-hook
+          (lambda ()
+            (eglot-ensure)
+            (setq-local company-minimum-prefix-length 1)
+            (setq-local company-idle-delay 0.1)
+            (setq-local company-backends '(company-capf company-keywords company-dabbrev company-files))
+            (company-mode 1)
+            (eldoc-mode 1)))
+
+;;c/c++ mode
+(setq c-basic-offset 4
+      tab-width 4
+      indent-tabs-mode nil)
+(add-hook 'c-mode-hook
+          (lambda ()
+            (c-set-offset 'substatement-open 0)))
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (c-set-offset 'substatement-open 0)))
+
+;;utf-8
+(global-set-key (kbd "C-c c")
+  (lambda ()
+    (interactive)
+    (when (eq system-type 'windows-nt)
+      (comint-send-string (get-buffer-process (current-buffer)) "chcp 65001 >nul 2>&1\n"))))
+
+
