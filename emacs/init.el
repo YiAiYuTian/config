@@ -84,11 +84,11 @@
 (define-key global-map (kbd "<f6>") #'my-cmake-run)
 
 ;;镜像源
-;;(require 'package)
-;;(setq package-archives
-;;      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-;;        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-;;        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+(require 'package)
+(setq package-archives
+      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
 ;;(package-initialize)
 ;;(package-refresh-contents)
@@ -99,7 +99,7 @@
   (load custom-file))
 
 ;;包
-(dolist (pkg '(eglot company multiple-cursors cmake-mode))
+(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text))
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
@@ -169,10 +169,37 @@
             (c-set-offset 'substatement-open 0)))
 
 ;;utf-8
-(global-set-key (kbd "C-c c")
-  (lambda ()
-    (interactive)
-    (when (eq system-type 'windows-nt)
-      (comint-send-string (get-buffer-process (current-buffer)) "chcp 65001 >nul 2>&1\n"))))
+;;(global-set-key (kbd "C-c c")
+;;  (lambda ()
+;;    (interactive)
+;;   (when (eq system-type 'windows-nt)
+;;      (comint-send-string (get-buffer-process (current-buffer)) "chcp 65001 >nul 2>&1\n"))))
 
+;;pulse
+(require 'pulse)
+(defface pulse-save-line-face
+  '((t :background "#4a4c53"))
+  "Save pulse highlight.")
+(defun pulse-line-after-save ()
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (let ((start (point)))
+      (end-of-line)
+      (pulse-momentary-highlight-region start (point) 'pulse-save-line-face))))
+(add-hook 'after-save-hook #'pulse-line-after-save)
+(setq pulse-delay 0.06)
+(setq pulse-iterations 5)
 
+;;move-text
+(require 'move-text)
+(global-set-key (kbd "M-p") 'move-text-up)
+(global-set-key (kbd "M-n") 'move-text-down)
+
+;;treesit
+(setq treesit-font-lock-level 4)
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+
+;;highlight
+(transient-mark-mode 1)
