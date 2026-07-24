@@ -14,7 +14,7 @@
  '(display-line-numbers-type 'relative)
  '(inhibit-startup-screen t)
  '(package-selected-packages
-   '(cmake-mode company doom-themes gruber-darker-theme move-text
+   '(cmake-mode company doom-themes gruber-darker-theme magit move-text
 		multiple-cursors))
  '(warning-suppress-types '((initialization))))
 

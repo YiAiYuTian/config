@@ -1,4 +1,4 @@
-1;;使用msys2
+;;
 ;;    gcc g++ clangd neocmakelsp
 
 ;;通用设置
@@ -9,6 +9,7 @@
 (ido-everywhere 1)
 (global-display-line-numbers-mode 1)
 (delete-selection-mode 1)
+(transient-mark-mode 1)
 (setq inhibit-startup-message t)
 (setq create-lockfiles nil)
 (setq auto-save-default nil)
@@ -21,68 +22,6 @@
 (setq display-line-numbers-grow-only nil)
 (setq display-line-numbers-width-start t)
 
-;; 查找CMake根目录
-(defun my-find-cmake-root ()
-  (let ((dir (expand-file-name default-directory)))
-    (while (and dir (not (file-exists-p (concat dir "/CMakeLists.txt"))))
-      (setq dir (file-name-directory (directory-file-name dir)))
-      (when (equal dir "/")
-        (setq dir nil)))
-    dir))
-
-;; 提取项目名
-(defun my-get-cmake-project-name (root-dir)
-  (let ((cmfile (concat root-dir "/CMakeLists.txt")))
-    (with-temp-buffer
-      (insert-file-contents cmfile)
-      (goto-char (point-min))
-      (if (re-search-forward "^[[:space:]]*project\\s*(" nil t)
-          (progn
-            (forward-char 1)
-            (skip-chars-forward " \t")
-            (let ((start (point)))
-              (skip-chars-forward "a-zA-Z0-9_-")
-              (buffer-substring-no-properties start (point))))
-        nil))))
-
-;; F5 编译（compilation窗口，自带chcp 65001）
-(defun my-cmake-build ()
-  (interactive)
-  (unless (fboundp 'my-find-cmake-root)
-    (message "错误：编译工具函数未加载，请重载配置文件")
-    (return))
-  (let ((root (my-find-cmake-root)))
-    (if root
-        (let ((build-cmd
-               (if (eq system-type 'windows-nt)
-                   (concat "cd " (shell-quote-argument root) " && chcp 65001 >nul 2>&1 && cmake -B build && cmake --build build")
-                 (concat "cd " (shell-quote-argument root) " && cmake -B build && cmake --build build"))))
-          (compile build-cmd))
-      (message "错误：当前目录向上未找到 CMakeLists.txt"))))
-
-;; F6 运行（输出缓冲窗口，自带chcp 65001）
-(defun my-cmake-run ()
-  (interactive)
-  (unless (and (fboundp 'my-find-cmake-root) (fboundp 'my-get-cmake-project-name))
-    (message "错误：编译工具函数未加载，请重载配置文件")
-    (return))
-  (let ((root (my-find-cmake-root)))
-    (if (not root)
-        (message "错误：未找到 CMakeLists.txt，无法定位程序")
-      (let ((exe-name (my-get-cmake-project-name root)))
-        (setq exe-name (or exe-name "YialiteTest"))
-        (let* ((quoted-root (shell-quote-argument root))
-               (quoted-exe (shell-quote-argument exe-name))
-               (cmd
-                (if (eq system-type 'windows-nt)
-                    (concat "cd " quoted-root " && chcp 65001 >nul 2>&1 && .\\build\\" quoted-exe ".exe && pause")
-                  (concat "cd " quoted-root " && ./build/" quoted-exe))))
-          (shell-command cmd "*cmake-run-output*"))))))
-
-;; 按键绑定
-(define-key global-map (kbd "<f5>") #'my-cmake-build)
-(define-key global-map (kbd "<f6>") #'my-cmake-run)
-
 ;;镜像源
 (require 'package)
 (setq package-archives
@@ -90,8 +29,8 @@
         ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
 
-;;(package-initialize)
-;;(package-refresh-contents)
+(package-initialize)
+(package-refresh-contents)
 
 ;;自定义文件
 (setq custom-file (expand-file-name "init.custom.el" user-emacs-directory))
@@ -99,7 +38,7 @@
   (load custom-file))
 
 ;;包
-(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text))
+(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text magit))
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
@@ -196,10 +135,14 @@
 (global-set-key (kbd "M-p") 'move-text-up)
 (global-set-key (kbd "M-n") 'move-text-down)
 
-;;treesit
-(setq treesit-font-lock-level 4)
-(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+;;set-mark-command
+(global-set-key (kbd "C-.") #'set-mark-command)
 
-;;highlight
-(transient-mark-mode 1)
+;;compile
+(require 'compile)
+(setq compile-command "make -j8")
+(global-set-key (kbd "<f5>") #'compile)
+
+;;git
+(global-set-key (kbd "C-x g") #'magit-status)
+(global-set-key (kbd "C-x M-g") #'magit-dispatch)
