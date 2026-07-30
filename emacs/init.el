@@ -10,6 +10,7 @@
 (global-display-line-numbers-mode 1)
 (delete-selection-mode 1)
 (transient-mark-mode 1)
+(setq dired-dwim-target t)
 (setq inhibit-startup-message t)
 (setq create-lockfiles nil)
 (setq auto-save-default nil)
@@ -23,14 +24,14 @@
 (setq display-line-numbers-width-start t)
 
 ;;镜像源
-(require 'package)
-(setq package-archives
-      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
-
-(package-initialize)
-(package-refresh-contents)
+;;(require 'package)
+;;(setq package-archives
+;;      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+;;        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+;;        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")))
+;;
+;;(package-initialize)
+;;(package-refresh-contents)
 
 ;;自定义文件
 (setq custom-file (expand-file-name "init.custom.el" user-emacs-directory))
@@ -38,16 +39,16 @@
   (load custom-file))
 
 ;;包
-(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text magit))
+(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text magit mc-extras))
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
 ;;多光标
 (require 'multiple-cursors)
 (global-set-key (kbd "C-S-<mouse-1>") 'mc/toggle-cursor-on-click)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)    ; 下一处同词加光标
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this); 上一处同词加光标
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this) ; 全文所有同词全部加光标
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
 ;;补全库
