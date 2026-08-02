@@ -1,5 +1,6 @@
 (set-face-attribute 'default nil
-                    :family "Consolas")
+                    :family "Consolas"
+		    :height 220)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

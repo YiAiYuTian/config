@@ -142,8 +142,27 @@
 ;;compile
 (require 'compile)
 (setq compile-command "make -j8")
-(global-set-key (kbd "<f5>") #'compile)
 
 ;;git
 (global-set-key (kbd "C-x g") #'magit-status)
 (global-set-key (kbd "C-x M-g") #'magit-dispatch)
+(global-set-key (kbd "<f5>") #'compile)
+
+;;indent
+(defun my-rigid-indent-forward-4 ()
+  (interactive)
+  (if (use-region-p)
+      (indent-rigidly (region-beginning) (region-end) 4)
+    (indent-rigidly (line-beginning-position) (line-end-position) 4)))
+
+(defun my-rigid-indent-backward-4 ()
+  (interactive)
+  (if (use-region-p)
+      (indent-rigidly (region-beginning) (region-end) -4)
+    (indent-rigidly (line-beginning-position) (line-end-position) -4)))
+
+(global-set-key (kbd "C-<tab>")    'my-rigid-indent-forward-4)
+(global-set-key (kbd "C-<iso-lefttab>")  'my-rigid-indent-backward-4)
+
+;;Comments
+(global-set-key (kbd "M-;") 'comment-dwim)
