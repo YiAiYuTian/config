@@ -39,7 +39,7 @@
   (load custom-file))
 
 ;;包
-(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text magit mc-extras))
+(dolist (pkg '(eglot company multiple-cursors cmake-mode move-text magit mc-extras dirvish))
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
@@ -166,3 +166,31 @@
 
 ;;Comments
 (global-set-key (kbd "M-;") 'comment-dwim)
+
+;;dired-x
+(require 'dired-x)
+
+(defun my-dired-jump-with-name ()
+  (interactive)
+  (let ((orig-buf (current-buffer))
+        (orig-pos (point)))
+    (dired-jump)
+    (let* ((bufname (buffer-name))
+           (clean-name (replace-regexp-in-string " -> .*$" "" bufname)))
+      (rename-buffer (format "%s -> %s" clean-name (buffer-name orig-buf))))
+    (setq-local my-dired-return-buf orig-buf)
+    (setq-local my-dired-return-pos orig-pos)))
+
+(defun my-dired-quit-window-advice (orig-fun &rest args)
+  (if (and (boundp 'my-dired-return-buf) (buffer-live-p my-dired-return-buf))
+      (progn
+        (switch-to-buffer my-dired-return-buf)
+        (goto-char my-dired-return-pos))
+    (apply orig-fun args)))
+
+(advice-add 'dired-quit-window :around #'my-dired-quit-window-advice)
+
+(global-set-key (kbd "C-x C-j") 'my-dired-jump-with-name)
+
+;;goto-line
+(global-set-key (kbd "C-c g") 'goto-line)
