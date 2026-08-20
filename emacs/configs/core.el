@@ -45,7 +45,6 @@
               standard-indent 4
               c-basic-offset 4
 	      prefer-coding-system 'utf-8-unix)
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 (global-auto-revert-mode t)
 (electric-pair-mode t)
 
