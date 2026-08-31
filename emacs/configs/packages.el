@@ -77,8 +77,9 @@
   :hook (prog-mode . eglot-ensure)
   :config
   ;;(add-hook 'before-save-hook #'eglot-format)
+  (add-to-list 'eglot-ignored-server-capabilities :semanticTokensProvider)
   (add-to-list 'eglot-server-programs
-               '(cmake-mode . ("cmake-language-server")))
+               '(cmake-mode . ("d:/msys64/home/20389/.venvs/cmake-lsp/Scripts/cmake-language-server.exe")))
   (setf (alist-get '(c-mode c++-mode) eglot-server-programs)
                '("clangd" "--header-insertion=never")))
 
