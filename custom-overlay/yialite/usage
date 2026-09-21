@@ -1,4 +1,0 @@
-YiaLite provides CMake targets:
-
-find_package(YiaLite CONFIG REQUIRED)
-target_link_libraries(main PRIVATE YiaLite::YiaLite)
