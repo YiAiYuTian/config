@@ -29,7 +29,7 @@
 ;; font
 (set-face-attribute 'default nil
                     :family "Consolas"
-		    :height 220)
+		            :height 150)
 ;;(setq-default line-spacing 0.11)
 (dolist (charset '(han kana symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font) charset

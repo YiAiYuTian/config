@@ -14,4 +14,10 @@
 (global-set-key (kbd "C-S-<up>")    'windmove-up)
 (global-set-key (kbd "C-S-<right>") 'windmove-right)
 
+;; c-mode find other file (.c .h)
+(define-key c-mode-map (kbd "C-c o") 'ff-find-other-file)
+(define-key c++-mode-map (kbd "C-c o") 'ff-find-other-file)
+(define-key c-mode-map (kbd "C-c O") 'ff-find-other-file-other-window)
+(define-key c++-mode-map (kbd "C-c O") 'ff-find-other-file-other-window)
+
 (provide 'keybinds)
