@@ -116,6 +116,21 @@
         (pulse-momentary-highlight-region start (point) 'pulse-save-line-face))))
   (add-hook 'after-save-hook #'pulse-line-after-save))
 
+;; whitespace
+(use-package whitespace
+  :ensure nil
+  :defer t
+  :hook
+  (prog-mode . whitespace-mode)
+  (text-mode . whitespace-mode)
+  :init
+  (setq whitespace-display-mappings '((space-mark ?\  [?·])))
+  (setq whitespace-style '(face spaces space-mark))
+  :config
+  (set-face-attribute 'whitespace-space nil
+                      :foreground "gray20"
+                      :background nil))
+
 ;; other-mode
 (use-package lua-mode :ensure t)
 (use-package csharp-mode :ensure t)
